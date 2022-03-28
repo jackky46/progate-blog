@@ -1,3 +1,6 @@
+// ENV
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 var bodyParser = require('body-parser')
@@ -19,15 +22,16 @@ const user = require('./models/users');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 
+
 const app = express();
 
 // setup database
 const con = mysql.createConnection({
-  host: 'remotemysql.com',
-  port: 3306,
-  user: 'fv2fduovCD',
-  password: 'xHbw5k5d2w',
-  database: 'fv2fduovCD'
+  host: process.env.mysqlHost,
+  port: process.env.mysqlPort,
+  user: process.env.mysqlUsername,
+  password: process.env.mysqlPassword,
+  database: process.env.mysqlDatabases
 })
 con.connect((err) => {
   if (err) throw err;
@@ -91,9 +95,9 @@ app.use(passport.session());
 
 /* Facebook Login Start */
 passport.use(new FacebookStrategy({
-  clientID: "362202375601201",
-  clientSecret: "33844f07237215efadbaad1c6aac0fd6",
-  callbackURL: "http://localhost:3000/users/facebook-login/callback"
+  clientID: process.env.facebookClientID,
+  clientSecret: process.env.facebookClientSecret,
+  callbackURL: process.env.facebookCallbackURL
 },
 
   function (accessToken, refreshToken, profile, done) {
